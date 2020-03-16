@@ -1,26 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component{
+  constructor(props){
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+    this.state = {jokes: []};
+  }
+  render(){
+    return (
+      <div className="App">
+        <button onClick={this.handleClick}>Show me your kick</button>
+    {this.state.jokes.length <= 0?'':<Jokes jokes={this.state.jokes} />}
+      </div>
+    )
+  } 
+
+  handleClick(){
+    fetch('https://api.icndb.com/jokes/random')
+    .then(response => response.json())
+    .then(({value})=>{
+      let found = this.state.jokes.find(el => el.id === value.id);
+      if(found === undefined){
+        this.setState({jokes:[value].concat(this.state.jokes)});
+      }
+    })
+  }
+}
+
+function Jokes(props){
+    return <ul>{props.jokes.map(el=><li key={el.id}><span>{el.joke.replace(/&\w+;/g, '"')}</span></li>)}</ul>;
 }
 
 export default App;
