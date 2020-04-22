@@ -10,7 +10,7 @@ class App extends React.Component{
   render(){
     return (
       <div className="App">
-        <button onClick={this.handleClick}>Show me your kick</button>
+        <button onClick={this.handleClick}>Click me</button>
     {this.state.jokes.length <= 0?'':<Jokes jokes={this.state.jokes} />}
       </div>
     )
